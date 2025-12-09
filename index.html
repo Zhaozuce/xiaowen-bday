@@ -300,7 +300,7 @@
             for (let i = 0; i < dataArray.length; i++) { sum += dataArray[i]; }
             let average = sum / dataArray.length;
 
-            if (average > 1500) { // 灵敏度阈值
+            if (average > 500) { // 灵敏度阈值
                 blowOutCandle();
             } else {
                 requestAnimationFrame(detectBlow);
@@ -429,6 +429,7 @@
     </script>
 </body>
 </html>
+
 
 
 
