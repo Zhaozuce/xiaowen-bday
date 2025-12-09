@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Happy Birthday 小雯 🎂</title>
+    <title>给小雯的一封信 💌</title>
     <style>
         /* --- 基础样式 --- */
         body {
@@ -11,7 +11,7 @@
             color: #e0e0e0;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
             margin: 0;
-            padding: 20px;
+            padding: 0;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -19,11 +19,52 @@
             overflow-x: hidden;
         }
 
+        /* --- 封面（信封）样式 --- */
+        #welcome-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #000;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 1s ease;
+        }
+
+        .open-btn {
+            background: linear-gradient(45deg, #ff9a9e 0%, #fecfef 100%);
+            border: none;
+            border-radius: 50px;
+            padding: 18px 40px;
+            color: #333;
+            font-size: 18px;
+            font-weight: bold;
+            box-shadow: 0 0 20px rgba(255, 154, 158, 0.6);
+            cursor: pointer;
+            animation: pulse 2s infinite; /* 按钮呼吸效果 */
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); box-shadow: 0 0 20px rgba(255, 154, 158, 0.6); }
+            50% { transform: scale(1.05); box-shadow: 0 0 30px rgba(255, 154, 158, 0.9); }
+            100% { transform: scale(1); box-shadow: 0 0 20px rgba(255, 154, 158, 0.6); }
+        }
+
+        /* --- 正文容器（初始隐藏） --- */
         .container {
             width: 100%;
             max-width: 600px;
             text-align: left;
+            margin-top: 40px;
             margin-bottom: 50px;
+            padding: 20px;
+            box-sizing: border-box;
+            opacity: 0; /* 先隐藏，点了按钮再显示 */
+            transition: opacity 1.5s ease;
         }
 
         h1 {
@@ -85,7 +126,7 @@
             padding-bottom: 60px;
         }
 
-        button {
+        .action-btn {
             background: linear-gradient(45deg, #ff9a9e 0%, #fecfef 100%);
             border: none;
             border-radius: 30px;
@@ -100,7 +141,7 @@
             -webkit-tap-highlight-color: transparent;
         }
 
-        button:active {
+        .action-btn:active {
             transform: scale(0.95);
         }
 
@@ -111,23 +152,22 @@
             min-height: 30px;
             font-weight: 500;
         }
-
-        .music-hint {
-            font-size: 12px;
-            color: #555;
-            text-align: center;
-            margin-bottom: 20px;
-        }
     </style>
 </head>
 <body>
-<audio id="bgm" loop preload="auto">
-    <source src="bgm.mp3" type="audio/mpeg">
-</audio>
-    <div class="container">
-        <div class="music-hint">🎧 戴上耳机，把手机横过来或竖着看都可以</div>
 
-        <h1>TO: 小雯</h1>
+    <audio id="bgm" loop>
+        <source src="bgm.mp3" type="audio/mpeg">
+    </audio>
+
+    <div id="welcome-screen">
+        <div style="font-size: 40px; margin-bottom: 20px;">💌</div>
+        <p style="color: #bbb; margin-bottom: 30px; letter-spacing: 2px;">TO: 小雯</p>
+        <button class="open-btn" id="start-btn">点击拆开</button>
+    </div>
+
+    <div class="container" id="main-content">
+        <h1>Happy Birthday 🎂</h1>
 
         <div class="story-text" id="p1">
             嘿，生日快乐。<br><br>
@@ -166,31 +206,46 @@
 
         <div class="interaction-area">
             <p style="font-size: 13px; color: #666; margin-bottom: 15px;">👇 心情不好的时候，点这里试用一下特权</p>
-            <button id="anger-btn">😤 哼，我现在就有小脾气！</button>
+            <button class="action-btn" id="anger-btn">😤 哼，我现在就有小脾气！</button>
             <div id="response-text"></div>
         </div>
     </div>
 
     <script>
-        // --- 3. 音乐触摸播放逻辑 ---
-window.addEventListener('click', function() {
-    var audio = document.getElementById('bgm');
-    if (audio.paused) {
-        audio.play();
-    }
-}, { once: true }); // 只要点一次屏幕，音乐就开始播放，之后就不会打扰了
-        // --- 1. 文字逐段浮现 ---
-        const paragraphs = ['p1', 'p2', 'p3', 'p4'];
-        let delay = 300;
+        // --- 逻辑控制 ---
+        const startBtn = document.getElementById('start-btn');
+        const welcomeScreen = document.getElementById('welcome-screen');
+        const mainContent = document.getElementById('main-content');
+        const audio = document.getElementById('bgm');
 
-        paragraphs.forEach((id) => {
+        // 1. 点击“拆开”按钮
+        startBtn.addEventListener('click', () => {
+            // 播放音乐
+            audio.play().catch(e => console.log("播放失败，请检查浏览器设置"));
+            
+            // 隐藏封面
+            welcomeScreen.style.opacity = 0;
             setTimeout(() => {
-                document.getElementById(id).classList.add('visible');
-            }, delay);
-            delay += 2200; // 每2.2秒出来一段，节奏舒缓
+                welcomeScreen.style.display = 'none';
+                mainContent.style.opacity = 1; // 显示正文
+                startTextAnimation(); // 开始文字浮现
+            }, 1000);
         });
 
-        // --- 2. 哄她按钮逻辑 ---
+        // 2. 文字逐段浮现函数
+        function startTextAnimation() {
+            const paragraphs = ['p1', 'p2', 'p3', 'p4'];
+            let delay = 500;
+
+            paragraphs.forEach((id) => {
+                setTimeout(() => {
+                    document.getElementById(id).classList.add('visible');
+                }, delay);
+                delay += 2200; // 每2.2秒出来一段
+            });
+        }
+
+        // 3. 哄她按钮逻辑
         const btn = document.getElementById('anger-btn');
         const response = document.getElementById('response-text');
         
@@ -216,7 +271,5 @@ window.addEventListener('click', function() {
             }
         });
     </script>
-    
 </body>
-
 </html>
