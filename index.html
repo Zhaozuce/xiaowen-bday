@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Happy Birthday 小雯 🎂</title>
+    <style>
+        /* --- 基础样式 --- */
+        body {
+            background-color: #121212;
+            color: #e0e0e0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 600px;
+            text-align: left;
+            margin-bottom: 50px;
+        }
+
+        h1 {
+            font-size: 22px;
+            color: #ff9a9e;
+            margin-bottom: 30px;
+            text-align: center;
+            letter-spacing: 1px;
+            font-weight: 300;
+        }
+
+        /* --- 文字段落样式 --- */
+        .story-text {
+            font-size: 16px;
+            line-height: 1.7;
+            margin-bottom: 25px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 1s ease;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 3px solid #ff9a9e;
+        }
+
+        .visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        strong {
+            color: #fff;
+            font-weight: 600;
+        }
+
+        /* 特权卡样式 */
+        .card-box {
+            background: linear-gradient(135deg, #2a2a2a 0%, #1f1f1f 100%);
+            border: 1px solid #444;
+            padding: 20px;
+            border-radius: 12px;
+            margin-top: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            text-align: center;
+        }
+        .card-title {
+            color: #ffcc00;
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        /* --- 按钮区域 --- */
+        .interaction-area {
+            margin-top: 40px;
+            text-align: center;
+            width: 100%;
+            padding-bottom: 60px;
+        }
+
+        button {
+            background: linear-gradient(45deg, #ff9a9e 0%, #fecfef 100%);
+            border: none;
+            border-radius: 30px;
+            padding: 15px 35px;
+            color: #333;
+            font-size: 16px;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(255, 154, 158, 0.4);
+            cursor: pointer;
+            transition: transform 0.2s;
+            outline: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        button:active {
+            transform: scale(0.95);
+        }
+
+        #response-text {
+            margin-top: 20px;
+            font-size: 16px;
+            color: #ff9a9e;
+            min-height: 30px;
+            font-weight: 500;
+        }
+
+        .music-hint {
+            font-size: 12px;
+            color: #555;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="music-hint">🎧 戴上耳机，把手机横过来或竖着看都可以</div>
+
+        <h1>TO: 小雯</h1>
+
+        <div class="story-text" id="p1">
+            嘿，生日快乐。<br><br>
+            最近我们总是拉拉扯扯，有些话在微信里输了又删。索性趁着今天，我想把这些心里话，写进这串只有你能看到的链接里。<br><br>
+            回想从9月8号初识到现在的过山车，虽然11月17号之后我们试图退回“朋友”的位置，但你也发现了对吧？感情这东西，比我们想象的更有惯性。
+        </div>
+
+        <div class="story-text" id="p2">
+            其实，我不需要任何标签来定义你。<br>
+            <strong>这几个月的相处，让我看到了很多别人也许没留意的细节。</strong><br><br>
+            我也慢慢习惯了你的那些可爱的小脾气。<br>
+            我看过你像个小孩一样突然炸毛，<br>
+            也见过你明明心软，嘴上却不饶人的样子。<br><br>
+            别人可能觉得难搞，<strong>但在我眼里，这些都是你最真实、最生动的部分。</strong>
+        </div>
+
+        <div class="story-text" id="p3">
+            所以，我想给你一份特殊的生日礼物。不是沉重的承诺，而是一张：
+            
+            <div class="card-box">
+                <span class="card-title">✨ 小雯专属 · 长期特权卡 ✨</span>
+                <div style="font-size: 14px; color: #bbb; line-height: 1.6;">
+                    在我们相处的日子里，你不必做一个完美的大人。<br>
+                    你想生气就生气，想任性就任性。<br>
+                    <strong>你的开心我陪着，你的小脾气我照单全收。</strong>
+                </div>
+            </div>
+        </div>
+
+        <div class="story-text" id="p4">
+            现实也许有很多无奈，我也许不能时刻挡在你前面，但我希望能成为你的<strong>“后备隐藏关卡”</strong>。<br><br>
+            当你累了、气了、或者只想找人发泄的时候，你可以随时躲进我这里。<br><br>
+            不用有压力，也不用想以后。<br>
+            <strong>此时此刻，我只想让你快乐。</strong>
+        </div>
+
+        <div class="interaction-area">
+            <p style="font-size: 13px; color: #666; margin-bottom: 15px;">👇 心情不好的时候，点这里试用一下特权</p>
+            <button id="anger-btn">😤 哼，我现在就有小脾气！</button>
+            <div id="response-text"></div>
+        </div>
+    </div>
+
+    <script>
+        // --- 1. 文字逐段浮现 ---
+        const paragraphs = ['p1', 'p2', 'p3', 'p4'];
+        let delay = 300;
+
+        paragraphs.forEach((id) => {
+            setTimeout(() => {
+                document.getElementById(id).classList.add('visible');
+            }, delay);
+            delay += 2200; // 每2.2秒出来一段，节奏舒缓
+        });
+
+        // --- 2. 哄她按钮逻辑 ---
+        const btn = document.getElementById('anger-btn');
+        const response = document.getElementById('response-text');
+        
+        let clickCount = 0;
+        const messages = [
+            "收到！正在启动无条件包容模式... 🛡️",
+            "谁惹小雯了？告诉我，我去帮你出气！👊",
+            "好啦好啦，不气不气，抱抱~ 🫂",
+            "不管你怎么闹，我都最喜欢你。❤️ 生日快乐！"
+        ];
+
+        btn.addEventListener('click', () => {
+            if (clickCount < messages.length) {
+                response.innerHTML = messages[clickCount];
+                if(navigator.vibrate) navigator.vibrate(50); 
+                clickCount++;
+            }
+            
+            if (clickCount === messages.length) {
+                btn.style.background = "#ddd";
+                btn.innerText = "❤️ 永远有效";
+                btn.disabled = true;
+            }
+        });
+    </script>
+</body>
+</html>
