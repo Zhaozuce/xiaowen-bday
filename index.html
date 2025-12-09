@@ -7,47 +7,34 @@
     <style>
         /* --- 基础样式 --- */
         body {
-            background-color: #121212;
-            color: #e0e0e0;
+            background-color: #121212; color: #e0e0e0;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
-            overflow-x: hidden;
-            touch-action: manipulation;
+            margin: 0; padding: 0;
+            display: flex; flex-direction: column; align-items: center;
+            min-height: 100vh; overflow-x: hidden; touch-action: manipulation;
         }
 
-        /* --- 音乐控制按钮 (右上角) --- */
-        .music-control-btn {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            width: 45px;
-            height: 45px;
-            background: rgba(255, 255, 255, 0.15);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            border-radius: 50%;
-            color: #fff;
-            font-size: 20px;
-            z-index: 20000; /* 最高层级 */
-            cursor: pointer;
-            display: none; /* 初始隐藏，拆信后显示 */
-            justify-content: center;
-            align-items: center;
-            backdrop-filter: blur(5px);
-            -webkit-backdrop-filter: blur(5px);
-            transition: all 0.3s;
-            box-shadow: 0 0 15px rgba(0,0,0,0.4);
+        /* --- 调试信息 (右上角) --- */
+        #debug-info {
+            position: fixed; top: 10px; right: 10px;
+            font-size: 10px; color: rgba(255,255,255,0.3);
+            pointer-events: none; z-index: 20000;
         }
-        /* 播放时的旋转动画 */
+
+        /* --- 音乐按钮 --- */
+        .music-control-btn {
+            position: fixed; top: 20px; right: 20px;
+            width: 40px; height: 40px;
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%; color: #fff; font-size: 18px;
+            z-index: 19999; cursor: pointer; display: none;
+            justify-content: center; align-items: center;
+            backdrop-filter: blur(5px);
+        }
         .music-control-btn.playing {
             animation: spin 4s linear infinite;
-            background: rgba(255, 154, 158, 0.3);
-            border-color: #ff9a9e;
-            box-shadow: 0 0 15px rgba(255, 154, 158, 0.4);
+            background: rgba(255, 154, 158, 0.4); border-color: #ff9a9e;
         }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
@@ -55,12 +42,15 @@
         #welcome-screen {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background-color: #000; z-index: 9999;
-            display: flex; flex-direction: column; justify-content: center; align-items: center; transition: opacity 0.8s ease;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            transition: opacity 0.8s ease;
         }
         .open-btn {
             background: linear-gradient(45deg, #ff9a9e 0%, #fecfef 100%);
-            border: none; border-radius: 50px; padding: 18px 40px; color: #333; font-size: 18px; font-weight: bold;
-            box-shadow: 0 0 20px rgba(255, 154, 158, 0.6); cursor: pointer; z-index: 10000; animation: pulse 2s infinite;
+            border: none; border-radius: 50px; padding: 18px 40px;
+            color: #333; font-size: 18px; font-weight: bold;
+            box-shadow: 0 0 20px rgba(255, 154, 158, 0.6);
+            cursor: pointer; z-index: 10000; animation: pulse 2s infinite;
         }
         @keyframes pulse {
             0% { transform: scale(1); box-shadow: 0 0 20px rgba(255, 154, 158, 0.6); }
@@ -72,10 +62,9 @@
         #candle-screen {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: radial-gradient(circle at center, #2a2a2a 0%, #000 100%);
-            z-index: 8888; display: none; flex-direction: column; justify-content: center; align-items: center; transition: opacity 1s ease;
+            z-index: 8888; display: none; flex-direction: column; justify-content: center; align-items: center;
+            transition: opacity 1s ease;
         }
-        
-        /* 蛋糕绘制 */
         .cake-stage { position: relative; width: 200px; height: 200px; margin-bottom: 80px; transform: scale(1.2); }
         .cake-base {
             position: absolute; bottom: 0; left: 50%; transform: translateX(-50%);
@@ -90,35 +79,24 @@
         .cake-icing { position: absolute; top: -5px; left: 10px; width: 160px; height: 20px; background: #fff; border-radius: 20px; z-index: 1; }
         .cherry { position: absolute; width: 20px; height: 20px; background: #d32f2f; border-radius: 50%; box-shadow: inset 0 -3px 5px rgba(0,0,0,0.3); z-index: 2; }
         .c1 { top: -25px; left: 30px; } .c2 { top: -25px; right: 30px; } .c3 { top: -15px; left: 80px; }
-
-        /* 蜡烛 */
         .candle {
             position: absolute; bottom: 50px; width: 16px; height: 70px;
             background: repeating-linear-gradient(45deg, #e3f2fd, #e3f2fd 5px, #90caf9 5px, #90caf9 10px);
             border-radius: 4px; z-index: 5; box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
         }
-        .candle-left { left: 70px; } /* 左蜡烛 */
-        .candle-right { left: 110px; } /* 右蜡烛 */
-
-        /* 蜡烛数字 */
-        .candle-num {
-            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            color: #1565c0; font-weight: bold; font-size: 14px;
-        }
-
+        .candle-left { left: 70px; } .candle-right { left: 110px; }
+        .candle-num { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: #1565c0; font-weight: bold; font-size: 14px; }
         .wick { position: absolute; top: -10px; left: 50%; transform: translateX(-50%); width: 2px; height: 10px; background: #333; }
-
-        /* 火焰 */
         .flame {
             position: absolute; top: -30px; left: 50%; transform: translateX(-50%);
             width: 18px; height: 28px;
             background: radial-gradient(ellipse at bottom, #ffff00 0%, #ff6a00 60%, transparent 100%);
             border-radius: 50% 50% 20% 20% / 60% 60% 40% 40%;
-            filter: blur(1px); animation: flicker 0.4s infinite alternate; transform-origin: center bottom; transition: all 0.5s ease;
+            filter: blur(1px); animation: flicker 0.4s infinite alternate;
+            transform-origin: center bottom; transition: all 0.5s ease;
         }
         .flame.out { opacity: 0; transform: translateX(-50%) scale(0.1); }
         @keyframes flicker { 0% { transform: translateX(-50%) scale(1); opacity: 0.9; } 100% { transform: translateX(-50%) scale(0.9, 1.1) rotate(3deg); opacity: 1; } }
-
         .blow-hint { color: #ff9a9e; font-size: 18px; margin-top: 20px; opacity: 0.8; animation: pulseText 2s infinite; text-align: center; }
         @keyframes pulseText { 0%, 100% { opacity: 0.6; } 50% { opacity: 1; } }
 
@@ -145,8 +123,10 @@
 </head>
 <body>
 
+    <div id="debug-info">Ready</div>
+
     <audio id="bgm" loop preload="auto">
-        <source src="https://raw.githubusercontent.com/Yemnamehmood/Birthday-wish-with-music-player/main/happy-birthday-155461.mp3" type="audio/mpeg">
+        <source src="bgm.mp3" type="audio/mpeg">
     </audio>
 
     <button id="music-toggle" class="music-control-btn">🎵</button>
@@ -231,40 +211,59 @@
         const candleScreen = document.getElementById('candle-screen');
         const mainContent = document.getElementById('main-content');
         const audio = document.getElementById('bgm');
-        const musicBtn = document.getElementById('music-toggle'); // 音乐按钮
+        const musicBtn = document.getElementById('music-toggle');
         const flame1 = document.getElementById('flame1');
         const flame2 = document.getElementById('flame2');
         const blowHintText = document.getElementById('blow-hint-text');
+        const debugInfo = document.getElementById('debug-info');
 
         let audioContext;
         let microphone;
         let analyser;
         let isBlowing = false;
 
-        // --- 音乐控制 ---
+        // --- 强制唤醒音频 (兼容iOS/微信) ---
+        function forceAudioUnlock() {
+            if(audio.paused) {
+                audio.play().then(() => {
+                    audio.pause();
+                    audio.currentTime = 0;
+                }).catch(e=>{});
+            }
+        }
+        document.addEventListener('touchstart', forceAudioUnlock, {once:true});
+        document.addEventListener('click', forceAudioUnlock, {once:true});
+
+        // --- 音乐按钮控制 ---
         musicBtn.addEventListener('click', () => {
             if (audio.paused) {
                 audio.play();
                 musicBtn.classList.add('playing');
                 musicBtn.innerText = "🎵";
+                debugInfo.innerText = "Music: Playing";
             } else {
                 audio.pause();
                 musicBtn.classList.remove('playing');
                 musicBtn.innerText = "🔇";
+                debugInfo.innerText = "Music: Paused";
             }
         });
 
         // --- 开始按钮 ---
         startBtn.addEventListener('click', () => {
-            // 尝试播放音乐
+            // 1. 尝试播放音乐
             audio.play().then(() => {
                 musicBtn.classList.add('playing');
-            }).catch(e => console.log("需交互播放"));
-            
-            // 显示音乐按钮
-            musicBtn.style.display = 'flex';
+                debugInfo.innerText = "Music: Started";
+            }).catch(e => {
+                console.log(e);
+                debugInfo.innerText = "Music: Autoplay Blocked (Tap btn)";
+            });
 
+            // 2. 显示UI
+            musicBtn.style.display = 'flex';
             welcomeScreen.style.opacity = 0;
+            
             setTimeout(() => {
                 welcomeScreen.style.display = 'none';
                 candleScreen.style.display = 'flex';
@@ -272,8 +271,14 @@
             }, 800);
         });
 
-        // --- 麦克风吹气检测 ---
+        // --- 麦克风 ---
         function startMicrophone() {
+            if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+                 blowHintText.innerText = "⚠️ 浏览器不支持麦克风，点击屏幕继续";
+                 document.addEventListener('click', blowOutCandle, {once:true});
+                 return;
+            }
+
             audioContext = new (window.AudioContext || window.webkitAudioContext)();
             analyser = audioContext.createAnalyser();
             analyser.fftSize = 512;
@@ -286,7 +291,7 @@
                     detectBlow();
                 })
                 .catch(err => {
-                    blowHintText.innerText = "⚠️ 请点击屏幕熄灭蜡烛 (麦克风受限)";
+                    blowHintText.innerText = "⚠️ 麦克风权限被拒，点击屏幕继续";
                     document.addEventListener('click', blowOutCandle, {once:true});
                 });
         }
@@ -300,7 +305,8 @@
             for (let i = 0; i < dataArray.length; i++) { sum += dataArray[i]; }
             let average = sum / dataArray.length;
 
-            if (average > 45) { // 灵敏度阈值
+            // 吹气灵敏度阈值：45 (数值越大越难吹灭)
+            if (average > 45) { 
                 blowOutCandle();
             } else {
                 requestAnimationFrame(detectBlow);
@@ -313,7 +319,7 @@
             flame1.classList.add('out');
             flame2.classList.add('out');
             blowHintText.innerText = "✨ 愿望实现 ✨";
-
+            
             if(microphone) microphone.disconnect();
             if(audioContext) audioContext.close();
 
@@ -341,7 +347,6 @@
             });
         }
 
-        // --- 哄她按钮 ---
         const btn = document.getElementById('anger-btn');
         const response = document.getElementById('response-text');
         let clickCount = 0;
@@ -429,12 +434,3 @@
     </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
