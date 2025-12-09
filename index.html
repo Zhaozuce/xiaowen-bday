@@ -121,7 +121,9 @@
     </style>
 </head>
 <body>
-
+<audio id="bgm" loop preload="auto">
+    <source src="bgm.mp3" type="audio/mpeg">
+</audio>
     <div class="container">
         <div class="music-hint">🎧 戴上耳机，把手机横过来或竖着看都可以</div>
 
@@ -170,6 +172,13 @@
     </div>
 
     <script>
+        // --- 3. 音乐触摸播放逻辑 ---
+window.addEventListener('click', function() {
+    var audio = document.getElementById('bgm');
+    if (audio.paused) {
+        audio.play();
+    }
+}, { once: true }); // 只要点一次屏幕，音乐就开始播放，之后就不会打扰了
         // --- 1. 文字逐段浮现 ---
         const paragraphs = ['p1', 'p2', 'p3', 'p4'];
         let delay = 300;
@@ -207,5 +216,7 @@
             }
         });
     </script>
+    
 </body>
+
 </html>
