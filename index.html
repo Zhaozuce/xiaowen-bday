@@ -20,57 +20,47 @@
             touch-action: manipulation;
         }
 
-        /* --- 音乐控制按钮 (新增) --- */
-        .music-btn {
+        /* --- 音乐控制按钮 (右上角) --- */
+        .music-control-btn {
             position: fixed;
             top: 20px;
             right: 20px;
-            width: 40px;
-            height: 40px;
-            background: rgba(255, 255, 255, 0.2);
+            width: 45px;
+            height: 45px;
+            background: rgba(255, 255, 255, 0.15);
             border: 1px solid rgba(255, 255, 255, 0.3);
             border-radius: 50%;
             color: #fff;
-            font-size: 18px;
-            z-index: 10000; /* 保证在最上层 */
+            font-size: 20px;
+            z-index: 20000; /* 最高层级 */
             cursor: pointer;
-            display: none; /* 初始隐藏，进入正文后再显示 */
+            display: none; /* 初始隐藏，拆信后显示 */
             justify-content: center;
             align-items: center;
             backdrop-filter: blur(5px);
             -webkit-backdrop-filter: blur(5px);
             transition: all 0.3s;
+            box-shadow: 0 0 15px rgba(0,0,0,0.4);
         }
-        
         /* 播放时的旋转动画 */
-        .music-btn.playing {
-            animation: spin 3s linear infinite;
-            background: rgba(255, 154, 158, 0.4); /* 播放时带点粉色 */
+        .music-control-btn.playing {
+            animation: spin 4s linear infinite;
+            background: rgba(255, 154, 158, 0.3);
             border-color: #ff9a9e;
+            box-shadow: 0 0 15px rgba(255, 154, 158, 0.4);
         }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        /* --- 封面（信封）样式 --- */
+        /* --- 封面样式 --- */
         #welcome-screen {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background-color: #000;
-            z-index: 9999;
-            display: flex; flex-direction: column;
-            justify-content: center; align-items: center;
-            transition: opacity 0.8s ease;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: #000; z-index: 9999;
+            display: flex; flex-direction: column; justify-content: center; align-items: center; transition: opacity 0.8s ease;
         }
         .open-btn {
             background: linear-gradient(45deg, #ff9a9e 0%, #fecfef 100%);
-            border: none; border-radius: 50px; padding: 18px 40px;
-            color: #333; font-size: 18px; font-weight: bold;
-            box-shadow: 0 0 20px rgba(255, 154, 158, 0.6);
-            cursor: pointer; z-index: 10000;
-            animation: pulse 2s infinite;
+            border: none; border-radius: 50px; padding: 18px 40px; color: #333; font-size: 18px; font-weight: bold;
+            box-shadow: 0 0 20px rgba(255, 154, 158, 0.6); cursor: pointer; z-index: 10000; animation: pulse 2s infinite;
         }
         @keyframes pulse {
             0% { transform: scale(1); box-shadow: 0 0 20px rgba(255, 154, 158, 0.6); }
@@ -78,46 +68,70 @@
             100% { transform: scale(1); box-shadow: 0 0 20px rgba(255, 154, 158, 0.6); }
         }
 
-        /* --- 蜡烛互动屏幕样式 --- */
+        /* --- 蛋糕互动屏幕 --- */
         #candle-screen {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background-color: #1a1a1a;
-            z-index: 8888;
-            display: none;
-            flex-direction: column;
-            justify-content: center; align-items: center;
-            transition: opacity 1s ease;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at center, #2a2a2a 0%, #000 100%);
+            z-index: 8888; display: none; flex-direction: column; justify-content: center; align-items: center; transition: opacity 1s ease;
         }
-        .candle-container { position: relative; width: 60px; height: 160px; margin-bottom: 50px; }
-        .candle-body { position: absolute; bottom: 0; width: 100%; height: 120px; background: linear-gradient(to right, #e0e0e0, #fff, #e0e0e0); border-radius: 8px; box-shadow: inset 0 -5px 10px rgba(0,0,0,0.1); }
-        .wick { position: absolute; top: 25px; left: 50%; transform: translateX(-50%); width: 4px; height: 15px; background: #333; }
+        
+        /* 蛋糕绘制 */
+        .cake-stage { position: relative; width: 200px; height: 200px; margin-bottom: 80px; transform: scale(1.2); }
+        .cake-base {
+            position: absolute; bottom: 0; left: 50%; transform: translateX(-50%);
+            width: 180px; height: 60px; background: #f8c2c2;
+            border-radius: 50% 50% 10px 10px / 30% 30% 10px 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3), inset 0 -10px 20px rgba(0,0,0,0.1);
+        }
+        .cake-base::before {
+            content: ''; position: absolute; top: -20px; left: 0; width: 100%; height: 40px;
+            background: #fff5f5; border-radius: 50%; box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+        }
+        .cake-icing { position: absolute; top: -5px; left: 10px; width: 160px; height: 20px; background: #fff; border-radius: 20px; z-index: 1; }
+        .cherry { position: absolute; width: 20px; height: 20px; background: #d32f2f; border-radius: 50%; box-shadow: inset 0 -3px 5px rgba(0,0,0,0.3); z-index: 2; }
+        .c1 { top: -25px; left: 30px; } .c2 { top: -25px; right: 30px; } .c3 { top: -15px; left: 80px; }
+
+        /* 蜡烛 */
+        .candle {
+            position: absolute; bottom: 50px; width: 16px; height: 70px;
+            background: repeating-linear-gradient(45deg, #e3f2fd, #e3f2fd 5px, #90caf9 5px, #90caf9 10px);
+            border-radius: 4px; z-index: 5; box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
+        }
+        .candle-left { left: 70px; } /* 左蜡烛 */
+        .candle-right { left: 110px; } /* 右蜡烛 */
+
+        /* 蜡烛数字 */
+        .candle-num {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            color: #1565c0; font-weight: bold; font-size: 14px;
+        }
+
+        .wick { position: absolute; top: -10px; left: 50%; transform: translateX(-50%); width: 2px; height: 10px; background: #333; }
+
+        /* 火焰 */
         .flame {
-            position: absolute; top: -10px; left: 50%; transform: translateX(-50%);
-            width: 24px; height: 36px;
-            background: radial-gradient(ellipse at bottom, #ffeb3b 0%, #ff9800 60%, transparent 100%);
+            position: absolute; top: -30px; left: 50%; transform: translateX(-50%);
+            width: 18px; height: 28px;
+            background: radial-gradient(ellipse at bottom, #ffff00 0%, #ff6a00 60%, transparent 100%);
             border-radius: 50% 50% 20% 20% / 60% 60% 40% 40%;
-            filter: blur(2px); animation: flicker 0.5s infinite alternate; transform-origin: center bottom; transition: all 0.5s ease;
+            filter: blur(1px); animation: flicker 0.4s infinite alternate; transform-origin: center bottom; transition: all 0.5s ease;
         }
-        @keyframes flicker { 0% { transform: translateX(-50%) scale(1); opacity: 0.9; } 100% { transform: translateX(-50%) scale(0.9, 1.1) rotate(2deg); opacity: 1; } }
         .flame.out { opacity: 0; transform: translateX(-50%) scale(0.1); }
-        .blow-hint { color: #ff9a9e; font-size: 18px; margin-top: 20px; opacity: 0.8; animation: pulseText 2s infinite; }
+        @keyframes flicker { 0% { transform: translateX(-50%) scale(1); opacity: 0.9; } 100% { transform: translateX(-50%) scale(0.9, 1.1) rotate(3deg); opacity: 1; } }
+
+        .blow-hint { color: #ff9a9e; font-size: 18px; margin-top: 20px; opacity: 0.8; animation: pulseText 2s infinite; text-align: center; }
         @keyframes pulseText { 0%, 100% { opacity: 0.6; } 50% { opacity: 1; } }
 
         /* --- 正文样式 --- */
         .container {
             width: 100%; max-width: 600px; text-align: left;
-            margin-top: 40px; margin-bottom: 50px; padding: 20px;
-            box-sizing: border-box;
-            opacity: 0; transition: opacity 1.5s ease;
-            display: none;
+            margin-top: 60px; margin-bottom: 50px; padding: 20px;
+            box-sizing: border-box; opacity: 0; transition: opacity 1.5s ease; display: none;
         }
         h1 { font-size: 22px; color: #ff9a9e; margin-bottom: 30px; text-align: center; letter-spacing: 1px; font-weight: 300; }
         .story-text {
-            font-size: 16px; line-height: 1.7; margin-bottom: 25px;
-            opacity: 0; transform: translateY(20px); transition: all 1s ease;
-            background: rgba(255, 255, 255, 0.05); padding: 15px;
-            border-radius: 8px; border-left: 3px solid #ff9a9e;
+            font-size: 16px; line-height: 1.7; margin-bottom: 25px; opacity: 0; transform: translateY(20px); transition: all 1s ease;
+            background: rgba(255, 255, 255, 0.05); padding: 15px; border-radius: 8px; border-left: 3px solid #ff9a9e;
         }
         .visible { opacity: 1; transform: translateY(0); }
         strong { color: #fff; font-weight: 600; }
@@ -131,11 +145,11 @@
 </head>
 <body>
 
-    <button id="music-btn" class="music-btn">🎵</button>
-
     <audio id="bgm" loop preload="auto">
-        <source src="bgm.mp3" type="audio/mpeg">
+        <source src="https://raw.githubusercontent.com/Yemnamehmood/Birthday-wish-with-music-player/main/happy-birthday-155461.mp3" type="audio/mpeg">
     </audio>
+
+    <button id="music-toggle" class="music-control-btn">🎵</button>
 
     <div id="welcome-screen">
         <div style="font-size: 40px; margin-bottom: 20px;">💌</div>
@@ -144,17 +158,30 @@
     </div>
 
     <div id="candle-screen">
-        <div class="candle-container">
-            <div class="flame" id="flame"></div>
-            <div class="wick"></div>
-            <div class="candle-body"></div>
+        <div class="cake-stage">
+            <div class="cake-base">
+                <div class="cake-icing"></div>
+                <div class="cherry c1"></div>
+                <div class="cherry c2"></div>
+                <div class="cherry c3"></div>
+            </div>
+            <div class="candle candle-left">
+                <div class="flame" id="flame1"></div>
+                <div class="wick"></div>
+                <div class="candle-num">2</div>
+            </div>
+            <div class="candle candle-right">
+                <div class="flame" id="flame2"></div>
+                <div class="wick"></div>
+                <div class="candle-num">1</div>
+            </div>
         </div>
-        <p class="blow-hint" id="blow-hint-text">🎂 许个愿，然后对着麦克风吹气</p>
-        <p style="font-size: 12px; color: #666; margin-top: 10px;">(需要允许使用麦克风权限哦)</p>
+        <p class="blow-hint" id="blow-hint-text">🎂 许个愿，吹灭21岁的蜡烛~</p>
+        <p style="font-size: 12px; color: #888; margin-top: 10px;">(对着手机麦克风用力吹气)</p>
     </div>
 
     <div class="container" id="main-content">
-        <h1>Happy 20th Birthday 🎂</h1>
+        <h1>Happy Birthday 🎂</h1>
 
         <div class="story-text" id="p1">
             嘿，生日快乐。<br><br>
@@ -204,8 +231,9 @@
         const candleScreen = document.getElementById('candle-screen');
         const mainContent = document.getElementById('main-content');
         const audio = document.getElementById('bgm');
-        const musicBtn = document.getElementById('music-btn'); // 音乐按钮
-        const flame = document.getElementById('flame');
+        const musicBtn = document.getElementById('music-toggle'); // 音乐按钮
+        const flame1 = document.getElementById('flame1');
+        const flame2 = document.getElementById('flame2');
         const blowHintText = document.getElementById('blow-hint-text');
 
         let audioContext;
@@ -213,55 +241,53 @@
         let analyser;
         let isBlowing = false;
 
-        // --- 1. 音乐控制逻辑 (新增) ---
+        // --- 音乐控制 ---
         musicBtn.addEventListener('click', () => {
             if (audio.paused) {
                 audio.play();
                 musicBtn.classList.add('playing');
-                musicBtn.innerText = '🎵';
+                musicBtn.innerText = "🎵";
             } else {
                 audio.pause();
                 musicBtn.classList.remove('playing');
-                musicBtn.innerText = '🔇';
+                musicBtn.innerText = "🔇";
             }
         });
 
-        // --- 2. 流程控制 ---
+        // --- 开始按钮 ---
         startBtn.addEventListener('click', () => {
-            // 播放音乐
+            // 尝试播放音乐
             audio.play().then(() => {
-                musicBtn.classList.add('playing'); // 按钮开始旋转
-            }).catch(e => console.log("音乐播放失败"));
+                musicBtn.classList.add('playing');
+            }).catch(e => console.log("需交互播放"));
             
             // 显示音乐按钮
             musicBtn.style.display = 'flex';
 
-            // 切换界面
             welcomeScreen.style.opacity = 0;
             setTimeout(() => {
                 welcomeScreen.style.display = 'none';
-                candleScreen.style.display = 'flex'; 
-                startMicrophone(); 
+                candleScreen.style.display = 'flex';
+                startMicrophone();
             }, 800);
         });
 
-        // --- 3. 麦克风监听 (Web Audio API) ---
+        // --- 麦克风吹气检测 ---
         function startMicrophone() {
             audioContext = new (window.AudioContext || window.webkitAudioContext)();
             analyser = audioContext.createAnalyser();
-            analyser.fftSize = 512; 
+            analyser.fftSize = 512;
 
             navigator.mediaDevices.getUserMedia({ audio: true })
                 .then(stream => {
-                    blowHintText.innerText = "🎤 已连接，请用力吹气~";
+                    blowHintText.innerText = "🎤 已连接，用力吹气许愿吧~";
                     microphone = audioContext.createMediaStreamSource(stream);
                     microphone.connect(analyser);
                     detectBlow();
                 })
                 .catch(err => {
-                    console.error('麦克风请求失败:', err);
-                    blowHintText.innerText = "⚠️ 无法访问麦克风，请点击屏幕继续";
-                    document.addEventListener('click', finishCandleStep, {once:true});
+                    blowHintText.innerText = "⚠️ 请点击屏幕熄灭蜡烛 (麦克风受限)";
+                    document.addEventListener('click', blowOutCandle, {once:true});
                 });
         }
 
@@ -271,13 +297,10 @@
             analyser.getByteFrequencyData(dataArray);
 
             let sum = 0;
-            for (let i = 0; i < dataArray.length; i++) {
-                sum += dataArray[i];
-            }
-            let averageVolume = sum / dataArray.length;
+            for (let i = 0; i < dataArray.length; i++) { sum += dataArray[i]; }
+            let average = sum / dataArray.length;
 
-            // 阈值45，可根据实际情况调整
-            if (averageVolume > 45) {
+            if (average > 40) { // 灵敏度阈值
                 blowOutCandle();
             } else {
                 requestAnimationFrame(detectBlow);
@@ -285,27 +308,26 @@
         }
 
         function blowOutCandle() {
+            if(isBlowing) return;
             isBlowing = true;
-            flame.classList.add('out'); 
-            blowHintText.innerText = "✨ 20岁生日快乐 ✨"; // 这里改成了20岁
+            flame1.classList.add('out');
+            flame2.classList.add('out');
+            blowHintText.innerText = "✨ 愿望实现 ✨";
 
-            if (microphone && audioContext) {
-                microphone.disconnect();
-                audioContext.close();
-            }
-            setTimeout(finishCandleStep, 1500);
-        }
+            if(microphone) microphone.disconnect();
+            if(audioContext) audioContext.close();
 
-        function finishCandleStep() {
-             candleScreen.style.opacity = 0;
-             setTimeout(() => {
-                 candleScreen.style.display = 'none';
-                 mainContent.style.display = 'block'; 
-                 setTimeout(() => {
-                     mainContent.style.opacity = 1; 
-                     startTextAnimation();
-                 }, 100);
-             }, 1000);
+            setTimeout(() => {
+                candleScreen.style.opacity = 0;
+                setTimeout(() => {
+                    candleScreen.style.display = 'none';
+                    mainContent.style.display = 'block';
+                    setTimeout(() => {
+                        mainContent.style.opacity = 1;
+                        startTextAnimation();
+                    }, 100);
+                }, 1000);
+            }, 1500);
         }
 
         function startTextAnimation() {
@@ -315,11 +337,11 @@
                 setTimeout(() => {
                     document.getElementById(id).classList.add('visible');
                 }, delay);
-                delay += 2200; 
+                delay += 2200;
             });
         }
 
-        // --- 哄她按钮逻辑 ---
+        // --- 哄她按钮 ---
         const btn = document.getElementById('anger-btn');
         const response = document.getElementById('response-text');
         let clickCount = 0;
@@ -352,9 +374,7 @@
                 window.mozRequestAnimationFrame ||
                 window.oRequestAnimationFrame ||
                 window.msRequestAnimationFrame ||
-                function(callback) {
-                    setTimeout(callback, 1000 / 60);
-                }
+                function(callback) { setTimeout(callback, 1000 / 60); }
         })();
         init();
         function init() {
@@ -399,11 +419,7 @@
         function css(css) {
             var style = document.createElement("style");
             style.type = "text/css";
-            try {
-                style.appendChild(document.createTextNode(css));
-            } catch (ex) {
-                style.styleSheet.cssText = css;
-            }
+            try { style.appendChild(document.createTextNode(css)); } catch (ex) { style.styleSheet.cssText = css; }
             document.getElementsByTagName('head')[0].appendChild(style);
         }
         function randomColor() {
