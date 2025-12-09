@@ -17,147 +17,121 @@
             align-items: center;
             min-height: 100vh;
             overflow-x: hidden;
-            /* 防止双击放大 */
             touch-action: manipulation;
+        }
+
+        /* --- 音乐控制按钮 (新增) --- */
+        .music-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            color: #fff;
+            font-size: 18px;
+            z-index: 10000; /* 保证在最上层 */
+            cursor: pointer;
+            display: none; /* 初始隐藏，进入正文后再显示 */
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            transition: all 0.3s;
+        }
+        
+        /* 播放时的旋转动画 */
+        .music-btn.playing {
+            animation: spin 3s linear infinite;
+            background: rgba(255, 154, 158, 0.4); /* 播放时带点粉色 */
+            border-color: #ff9a9e;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
 
         /* --- 封面（信封）样式 --- */
         #welcome-screen {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            top: 0; left: 0; width: 100%; height: 100%;
             background-color: #000;
             z-index: 9999;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            transition: opacity 1s ease;
+            display: flex; flex-direction: column;
+            justify-content: center; align-items: center;
+            transition: opacity 0.8s ease;
         }
-
         .open-btn {
             background: linear-gradient(45deg, #ff9a9e 0%, #fecfef 100%);
-            border: none;
-            border-radius: 50px;
-            padding: 18px 40px;
-            color: #333;
-            font-size: 18px;
-            font-weight: bold;
+            border: none; border-radius: 50px; padding: 18px 40px;
+            color: #333; font-size: 18px; font-weight: bold;
             box-shadow: 0 0 20px rgba(255, 154, 158, 0.6);
-            cursor: pointer;
-            animation: pulse 2s infinite; /* 按钮呼吸效果 */
-            z-index: 10000; /* 确保按钮在最上面 */
+            cursor: pointer; z-index: 10000;
+            animation: pulse 2s infinite;
         }
-
         @keyframes pulse {
             0% { transform: scale(1); box-shadow: 0 0 20px rgba(255, 154, 158, 0.6); }
             50% { transform: scale(1.05); box-shadow: 0 0 30px rgba(255, 154, 158, 0.9); }
             100% { transform: scale(1); box-shadow: 0 0 20px rgba(255, 154, 158, 0.6); }
         }
 
-        /* --- 正文容器（初始隐藏） --- */
+        /* --- 蜡烛互动屏幕样式 --- */
+        #candle-screen {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-color: #1a1a1a;
+            z-index: 8888;
+            display: none;
+            flex-direction: column;
+            justify-content: center; align-items: center;
+            transition: opacity 1s ease;
+        }
+        .candle-container { position: relative; width: 60px; height: 160px; margin-bottom: 50px; }
+        .candle-body { position: absolute; bottom: 0; width: 100%; height: 120px; background: linear-gradient(to right, #e0e0e0, #fff, #e0e0e0); border-radius: 8px; box-shadow: inset 0 -5px 10px rgba(0,0,0,0.1); }
+        .wick { position: absolute; top: 25px; left: 50%; transform: translateX(-50%); width: 4px; height: 15px; background: #333; }
+        .flame {
+            position: absolute; top: -10px; left: 50%; transform: translateX(-50%);
+            width: 24px; height: 36px;
+            background: radial-gradient(ellipse at bottom, #ffeb3b 0%, #ff9800 60%, transparent 100%);
+            border-radius: 50% 50% 20% 20% / 60% 60% 40% 40%;
+            filter: blur(2px); animation: flicker 0.5s infinite alternate; transform-origin: center bottom; transition: all 0.5s ease;
+        }
+        @keyframes flicker { 0% { transform: translateX(-50%) scale(1); opacity: 0.9; } 100% { transform: translateX(-50%) scale(0.9, 1.1) rotate(2deg); opacity: 1; } }
+        .flame.out { opacity: 0; transform: translateX(-50%) scale(0.1); }
+        .blow-hint { color: #ff9a9e; font-size: 18px; margin-top: 20px; opacity: 0.8; animation: pulseText 2s infinite; }
+        @keyframes pulseText { 0%, 100% { opacity: 0.6; } 50% { opacity: 1; } }
+
+        /* --- 正文样式 --- */
         .container {
-            width: 100%;
-            max-width: 600px;
-            text-align: left;
-            margin-top: 40px;
-            margin-bottom: 50px;
-            padding: 20px;
+            width: 100%; max-width: 600px; text-align: left;
+            margin-top: 40px; margin-bottom: 50px; padding: 20px;
             box-sizing: border-box;
-            opacity: 0; /* 先隐藏，点了按钮再显示 */
-            transition: opacity 1.5s ease;
+            opacity: 0; transition: opacity 1.5s ease;
+            display: none;
         }
-
-        h1 {
-            font-size: 22px;
-            color: #ff9a9e;
-            margin-bottom: 30px;
-            text-align: center;
-            letter-spacing: 1px;
-            font-weight: 300;
-        }
-
-        /* --- 文字段落样式 --- */
+        h1 { font-size: 22px; color: #ff9a9e; margin-bottom: 30px; text-align: center; letter-spacing: 1px; font-weight: 300; }
         .story-text {
-            font-size: 16px;
-            line-height: 1.7;
-            margin-bottom: 25px;
-            opacity: 0;
-            transform: translateY(20px);
-            transition: all 1s ease;
-            background: rgba(255, 255, 255, 0.05);
-            padding: 15px;
-            border-radius: 8px;
-            border-left: 3px solid #ff9a9e;
+            font-size: 16px; line-height: 1.7; margin-bottom: 25px;
+            opacity: 0; transform: translateY(20px); transition: all 1s ease;
+            background: rgba(255, 255, 255, 0.05); padding: 15px;
+            border-radius: 8px; border-left: 3px solid #ff9a9e;
         }
-
-        .visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        strong {
-            color: #fff;
-            font-weight: 600;
-        }
-
-        /* 特权卡样式 */
-        .card-box {
-            background: linear-gradient(135deg, #2a2a2a 0%, #1f1f1f 100%);
-            border: 1px solid #444;
-            padding: 20px;
-            border-radius: 12px;
-            margin-top: 10px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-            text-align: center;
-        }
-        .card-title {
-            color: #ffcc00;
-            font-size: 18px;
-            font-weight: bold;
-            margin-bottom: 10px;
-            display: block;
-        }
-
-        /* --- 按钮区域 --- */
-        .interaction-area {
-            margin-top: 40px;
-            text-align: center;
-            width: 100%;
-            padding-bottom: 60px;
-        }
-
-        .action-btn {
-            background: linear-gradient(45deg, #ff9a9e 0%, #fecfef 100%);
-            border: none;
-            border-radius: 30px;
-            padding: 15px 35px;
-            color: #333;
-            font-size: 16px;
-            font-weight: bold;
-            box-shadow: 0 4px 15px rgba(255, 154, 158, 0.4);
-            cursor: pointer;
-            transition: transform 0.2s;
-            outline: none;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        .action-btn:active {
-            transform: scale(0.95);
-        }
-
-        #response-text {
-            margin-top: 20px;
-            font-size: 16px;
-            color: #ff9a9e;
-            min-height: 30px;
-            font-weight: 500;
-        }
+        .visible { opacity: 1; transform: translateY(0); }
+        strong { color: #fff; font-weight: 600; }
+        .card-box { background: linear-gradient(135deg, #2a2a2a 0%, #1f1f1f 100%); border: 1px solid #444; padding: 20px; border-radius: 12px; margin-top: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); text-align: center; }
+        .card-title { color: #ffcc00; font-size: 18px; font-weight: bold; margin-bottom: 10px; display: block; }
+        .interaction-area { margin-top: 40px; text-align: center; width: 100%; padding-bottom: 60px; }
+        .action-btn { background: linear-gradient(45deg, #ff9a9e 0%, #fecfef 100%); border: none; border-radius: 30px; padding: 15px 35px; color: #333; font-size: 16px; font-weight: bold; box-shadow: 0 4px 15px rgba(255, 154, 158, 0.4); cursor: pointer; transition: transform 0.2s; outline: none; -webkit-tap-highlight-color: transparent; }
+        .action-btn:active { transform: scale(0.95); }
+        #response-text { margin-top: 20px; font-size: 16px; color: #ff9a9e; min-height: 30px; font-weight: 500; }
     </style>
 </head>
 <body>
+
+    <button id="music-btn" class="music-btn">🎵</button>
 
     <audio id="bgm" loop preload="auto">
         <source src="bgm.mp3" type="audio/mpeg">
@@ -169,8 +143,18 @@
         <button class="open-btn" id="start-btn">点击拆开</button>
     </div>
 
+    <div id="candle-screen">
+        <div class="candle-container">
+            <div class="flame" id="flame"></div>
+            <div class="wick"></div>
+            <div class="candle-body"></div>
+        </div>
+        <p class="blow-hint" id="blow-hint-text">🎂 许个愿，然后对着麦克风吹气</p>
+        <p style="font-size: 12px; color: #666; margin-top: 10px;">(需要允许使用麦克风权限哦)</p>
+    </div>
+
     <div class="container" id="main-content">
-        <h1>Happy Birthday 🎂</h1>
+        <h1>Happy 20th Birthday 🎂</h1>
 
         <div class="story-text" id="p1">
             嘿，生日快乐。<br><br>
@@ -217,28 +201,116 @@
     <script>
         const startBtn = document.getElementById('start-btn');
         const welcomeScreen = document.getElementById('welcome-screen');
+        const candleScreen = document.getElementById('candle-screen');
         const mainContent = document.getElementById('main-content');
         const audio = document.getElementById('bgm');
+        const musicBtn = document.getElementById('music-btn'); // 音乐按钮
+        const flame = document.getElementById('flame');
+        const blowHintText = document.getElementById('blow-hint-text');
 
-        // 1. 点击“拆开”按钮
+        let audioContext;
+        let microphone;
+        let analyser;
+        let isBlowing = false;
+
+        // --- 1. 音乐控制逻辑 (新增) ---
+        musicBtn.addEventListener('click', () => {
+            if (audio.paused) {
+                audio.play();
+                musicBtn.classList.add('playing');
+                musicBtn.innerText = '🎵';
+            } else {
+                audio.pause();
+                musicBtn.classList.remove('playing');
+                musicBtn.innerText = '🔇';
+            }
+        });
+
+        // --- 2. 流程控制 ---
         startBtn.addEventListener('click', () => {
             // 播放音乐
-            audio.play().catch(e => console.log("播放失败，请检查浏览器设置"));
+            audio.play().then(() => {
+                musicBtn.classList.add('playing'); // 按钮开始旋转
+            }).catch(e => console.log("音乐播放失败"));
             
-            // 隐藏封面
+            // 显示音乐按钮
+            musicBtn.style.display = 'flex';
+
+            // 切换界面
             welcomeScreen.style.opacity = 0;
             setTimeout(() => {
                 welcomeScreen.style.display = 'none';
-                mainContent.style.opacity = 1; // 显示正文
-                startTextAnimation(); // 开始文字浮现
-            }, 1000);
+                candleScreen.style.display = 'flex'; 
+                startMicrophone(); 
+            }, 800);
         });
 
-        // 2. 文字逐段浮现函数
+        // --- 3. 麦克风监听 (Web Audio API) ---
+        function startMicrophone() {
+            audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            analyser = audioContext.createAnalyser();
+            analyser.fftSize = 512; 
+
+            navigator.mediaDevices.getUserMedia({ audio: true })
+                .then(stream => {
+                    blowHintText.innerText = "🎤 已连接，请用力吹气~";
+                    microphone = audioContext.createMediaStreamSource(stream);
+                    microphone.connect(analyser);
+                    detectBlow();
+                })
+                .catch(err => {
+                    console.error('麦克风请求失败:', err);
+                    blowHintText.innerText = "⚠️ 无法访问麦克风，请点击屏幕继续";
+                    document.addEventListener('click', finishCandleStep, {once:true});
+                });
+        }
+
+        function detectBlow() {
+            if (isBlowing) return;
+            const dataArray = new Uint8Array(analyser.frequencyBinCount);
+            analyser.getByteFrequencyData(dataArray);
+
+            let sum = 0;
+            for (let i = 0; i < dataArray.length; i++) {
+                sum += dataArray[i];
+            }
+            let averageVolume = sum / dataArray.length;
+
+            // 阈值45，可根据实际情况调整
+            if (averageVolume > 45) {
+                blowOutCandle();
+            } else {
+                requestAnimationFrame(detectBlow);
+            }
+        }
+
+        function blowOutCandle() {
+            isBlowing = true;
+            flame.classList.add('out'); 
+            blowHintText.innerText = "✨ 20岁生日快乐 ✨"; // 这里改成了20岁
+
+            if (microphone && audioContext) {
+                microphone.disconnect();
+                audioContext.close();
+            }
+            setTimeout(finishCandleStep, 1500);
+        }
+
+        function finishCandleStep() {
+             candleScreen.style.opacity = 0;
+             setTimeout(() => {
+                 candleScreen.style.display = 'none';
+                 mainContent.style.display = 'block'; 
+                 setTimeout(() => {
+                     mainContent.style.opacity = 1; 
+                     startTextAnimation();
+                 }, 100);
+             }, 1000);
+        }
+
         function startTextAnimation() {
             const paragraphs = ['p1', 'p2', 'p3', 'p4'];
             let delay = 500;
-
             paragraphs.forEach((id) => {
                 setTimeout(() => {
                     document.getElementById(id).classList.add('visible');
@@ -247,10 +319,9 @@
             });
         }
 
-        // 3. 哄她按钮逻辑
+        // --- 哄她按钮逻辑 ---
         const btn = document.getElementById('anger-btn');
         const response = document.getElementById('response-text');
-        
         let clickCount = 0;
         const messages = [
             "收到！正在启动无条件包容模式... 🛡️",
@@ -258,14 +329,12 @@
             "好啦好啦，不气不气，抱抱~ 🫂",
             "不管你怎么闹，我都最喜欢你。❤️ 生日快乐！"
         ];
-
         btn.addEventListener('click', () => {
             if (clickCount < messages.length) {
                 response.innerHTML = messages[clickCount];
                 if(navigator.vibrate) navigator.vibrate(50); 
                 clickCount++;
             }
-            
             if (clickCount === messages.length) {
                 btn.style.background = "#ddd";
                 btn.innerText = "❤️ 永远有效";
@@ -288,13 +357,11 @@
                 }
         })();
         init();
-
         function init() {
             css(".heart{width: 10px;height: 10px;position: fixed;background: #f00;transform: rotate(45deg);-webkit-transform: rotate(45deg);-moz-transform: rotate(45deg);}.heart:after,.heart:before{content: '';width: inherit;height: inherit;background: inherit;border-radius: 50%;-webkit-border-radius: 50%;-moz-border-radius: 50%;position: fixed;}.heart:after{top: -5px;}.heart:before{left: -5px;}");
             attachEvent();
             gameloop();
         }
-
         function gameloop() {
             for (var i = 0; i < hearts.length; i++) {
                 if (hearts[i].alpha <= 0) {
@@ -309,7 +376,6 @@
             }
             requestAnimationFrame(gameloop);
         }
-
         function attachEvent() {
             var old = typeof window.onclick === "function" && window.onclick;
             window.onclick = function(event) {
@@ -317,7 +383,6 @@
                 createHeart(event);
             }
         }
-
         function createHeart(event) {
             var d = document.createElement("div");
             d.className = "heart";
@@ -331,7 +396,6 @@
             });
             document.body.appendChild(d);
         }
-
         function css(css) {
             var style = document.createElement("style");
             style.type = "text/css";
@@ -342,7 +406,6 @@
             }
             document.getElementsByTagName('head')[0].appendChild(style);
         }
-
         function randomColor() {
             return "rgb(" + (~~(Math.random() * 255)) + "," + (~~(Math.random() * 255)) + "," + (~~(Math.random() * 255)) + ")";
         }
@@ -350,4 +413,3 @@
     </script>
 </body>
 </html>
-
