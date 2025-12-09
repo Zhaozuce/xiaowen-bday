@@ -17,6 +17,8 @@
             align-items: center;
             min-height: 100vh;
             overflow-x: hidden;
+            /* 防止双击放大 */
+            touch-action: manipulation;
         }
 
         /* --- 封面（信封）样式 --- */
@@ -46,6 +48,7 @@
             box-shadow: 0 0 20px rgba(255, 154, 158, 0.6);
             cursor: pointer;
             animation: pulse 2s infinite; /* 按钮呼吸效果 */
+            z-index: 10000; /* 确保按钮在最上面 */
         }
 
         @keyframes pulse {
@@ -156,7 +159,7 @@
 </head>
 <body>
 
-    <audio id="bgm" loop>
+    <audio id="bgm" loop preload="auto">
         <source src="bgm.mp3" type="audio/mpeg">
     </audio>
 
@@ -212,7 +215,6 @@
     </div>
 
     <script>
-        // --- 逻辑控制 ---
         const startBtn = document.getElementById('start-btn');
         const welcomeScreen = document.getElementById('welcome-screen');
         const mainContent = document.getElementById('main-content');
@@ -241,7 +243,7 @@
                 setTimeout(() => {
                     document.getElementById(id).classList.add('visible');
                 }, delay);
-                delay += 2200; // 每2.2秒出来一段
+                delay += 2200; 
             });
         }
 
@@ -271,7 +273,7 @@
             }
         });
     </script>
-</body>
+
     <script>
     (function(window, document, undefined) {
         var hearts = [];
@@ -342,10 +344,9 @@
         }
 
         function randomColor() {
-            // 这里的颜色我都调成了粉色系，适合表白
             return "rgb(" + (~~(Math.random() * 255)) + "," + (~~(Math.random() * 255)) + "," + (~~(Math.random() * 255)) + ")";
         }
     })(window, document);
-</script>
+    </script>
+</body>
 </html>
-
